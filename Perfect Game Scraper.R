@@ -12,7 +12,8 @@ library(RODBC)
 conn <- dbConnect(MySQL(), user='root', password='root', host='127.0.0.1', db= 'mlb_draft', port=8889)
 on.exit(dbDisconnect(conn))
 
-# Function to find a players summary via player_id
+# Function to find a player's summary information via player_id 
+
 scrape_pg_player_summary <- function(playerID) {
   url <- paste0("https://www.perfectgame.org/Players/PlayerProfile.aspx?ID=", playerID)
   text_xml <- read_html(url)
@@ -61,7 +62,8 @@ scrape_pg_player_summary <- function(playerID) {
 
 plan(multisession(workers = 7))
 
-# Iterate over observations - I did it in chunks to make sure it ran prperly 
+# Iterate over observations - I did it in chunks to make sure it ran properly 
+
 players_7 <- future_map(850000:800001, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
 players_6 <- future_map(800000:750000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
 players_5 <- future_map(749999:700000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
@@ -72,8 +74,9 @@ players_1 <- future_map(199999:1, possibly(scrape_pg_player_summary, NULL), .pro
 
 
 # Bind and clean 
+
 all_the_players <- 
-  bind_rows(players_3, players_4, players_5, players_6, players_7, players_8, players_9) %>% 
+  bind_rows(players_1, players_2, players_3, players_4, players_5, players_6, players_7) %>% 
   filter(!is.na(player_name)) %>% 
   separate(draft_date, into = c("draft_round", "draft_year"), sep = "-") %>% 
   separate(height, into = c("height_feet", "height_inches"), sep = "-") %>% 
@@ -123,6 +126,7 @@ all_the_players <-
   arrange(player_id) 
 
 # Write scraped data to SQL
+
 dbWriteTable(conn, 'perfect_game_player_summary', all_the_players, overwrite=T, row.names = FALSE)
 
 
