@@ -1,5 +1,6 @@
 # MLB-Draft-Analytics
-Attempting to make a dent in public MLB Draft Analytics through statistics and text analytics
+Attempting to make a dent in public MLB Draft Analytics through statistics and text analytics. My overarching goal is to be able to compare text reports, scouting reports, and stats from a variety of sources and decipher between these data sources to create an informed pre-draft prediction of players. The inspiration for this project is [Text Mining of Scouting Reports as a Novel Data Source
+for Improving NHL Draft Analytics](https://pdfs.semanticscholar.org/2f0a/a4de57e251846b55de8792e5b5ef97264cfc.pdf) by Seppa, Schuckers, Rovito.
 
 # Perfect Game Scrapers
 [Perfect Game](https://www.perfectgame.org/default.aspx)  is an invaluable resource to the baseball scouting community, with reports and data on over 10,000 drafted baseball players and hundreds of thousands of others. The majority of top draft prospects and high-end college baseball players participate in PG Events. 
