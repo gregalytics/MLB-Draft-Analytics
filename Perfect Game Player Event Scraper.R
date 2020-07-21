@@ -28,7 +28,8 @@ remDr$findElement(using = 'css selector', ".cc-btn")$clickElement()
 
 # Scrapes a players individual events
     #1) Looks at how many events player has in element #spnEventNum
-    #2) 
+    #2) Scrapes through that number of events for all possible metrics
+       #** There will be nulls
 scrape_pg_events <- function(playerID) {
   
   player_id <- playerID
