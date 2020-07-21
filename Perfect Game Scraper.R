@@ -7,8 +7,12 @@ library(naniar)
 library(RMySQL)
 library(RODBC)
 
+# Connect to a MySQL database - I use MAMP + SequelPro and created a DB called mlb_draft
+
 conn <- dbConnect(MySQL(), user='root', password='root', host='127.0.0.1', db= 'mlb_draft', port=8889)
 on.exit(dbDisconnect(conn))
+
+# Function to find a player's summary information via player_id 
 
 scrape_pg_player_summary <- function(playerID) {
   url <- paste0("https://www.perfectgame.org/Players/PlayerProfile.aspx?ID=", playerID)
@@ -49,27 +53,31 @@ scrape_pg_player_summary <- function(playerID) {
          state_pos_rank = noder(text_xml, " #ContentPlaceHolder1_lblStatePos"),
          height = noder(text_xml, "#ContentPlaceHolder1_lblHt"),
          weight = noder(text_xml, "#ContentPlaceHolder1_lblWt"),
-         bat_throw = noder(text_xml, "#ContentPlaceHolder1_lbl"),
-         
+         bat_throw = noder(text_xml, "#ContentPlaceHolder1_lbl")
   )
 }
 
+# Initialize session to run scraper in parallel 
+# As of July 19, 2020, highest PG ID ~ 820,000
+
 plan(multisession(workers = 7))
 
-children_9 <- future_map(800001:850000, scrape_pg_player_summary, .progress = TRUE)
-children_8 <- future_map(800000:750000, scrape_pg_player_summary, .progress = TRUE)
-children_7 <- future_map(749999:700000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
-children_6 <- future_map(699999:600000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
-children_5 <- future_map(599999:400000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
-children_4 <- future_map(399999:200000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
-children_3 <- future_map(199999:1, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
+# Iterate over observations - I did it in chunks to make sure it ran properly 
 
-cmen <- bind_rows(children_9)
-all_the_children <- bind_rows(children_3, children_4, children_5, children_6, children_7, children_8, children_9) %>% 
-  filter(!is.na(player_name))
+players_7 <- future_map(850000:800001, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
+players_6 <- future_map(800000:750000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
+players_5 <- future_map(749999:700000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
+players_4 <- future_map(699999:600000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
+players_3 <- future_map(599999:400000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
+players_2 <- future_map(399999:200000, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
+players_1 <- future_map(199999:1, possibly(scrape_pg_player_summary, NULL), .progress = TRUE)
 
-children <- 
-  all_the_children %>% 
+
+# Bind and clean 
+
+all_the_players <- 
+  bind_rows(players_1, players_2, players_3, players_4, players_5, players_6, players_7) %>% 
+  filter(!is.na(player_name)) %>% 
   separate(draft_date, into = c("draft_round", "draft_year"), sep = "-") %>% 
   separate(height, into = c("height_feet", "height_inches"), sep = "-") %>% 
   separate(hometown, into = c("home_city", "home_state"), sep = ",") %>% 
@@ -117,7 +125,9 @@ children <-
   rename(player_id = playerID) %>% 
   arrange(player_id) 
 
-dbWriteTable(conn, 'perfect_game_player_summary', children, overwrite=T, row.names = FALSE)
+# Write scraped data to SQL
+
+dbWriteTable(conn, 'perfect_game_player_summary', all_the_players, overwrite=T, row.names = FALSE)
 
 
 
