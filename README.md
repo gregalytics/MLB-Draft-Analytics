@@ -2,7 +2,7 @@
 Attempting to make a dent in public MLB Draft Analytics through statistics and text analytics
 
 # Perfect Game Scrapers
-Perfect Game is an invaluable resource to the baseball scouting community, with reports and data on over 10,000 drafted baseball players and hundreds of thousands of others. The majority of top draft prospects and high-end college baseball players participate in PG Events. 
+[Perfect Game](https://www.perfectgame.org/default.aspx)  is an invaluable resource to the baseball scouting community, with reports and data on over 10,000 drafted baseball players and hundreds of thousands of others. The majority of top draft prospects and high-end college baseball players participate in PG Events. 
 
 I have written two scrapers. The first is built on rvest to look through a wide number of potential ID's to find if players exist there, and scrape static information that you first see when looking at the page. 
 
