@@ -111,6 +111,8 @@ scrape_pg_events <- function(playerID) {
 map_df(seq, get_data)
 }
 
+# Example - scrape_pg_events(346538) 
+
 remDr$close
 
 
