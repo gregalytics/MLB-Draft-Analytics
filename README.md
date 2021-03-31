@@ -2,8 +2,7 @@
 Attempting to make a dent in public MLB Draft Analytics through statistics and text analytics. My overarching goal is to be able to compare the abundant text reports, scouting reports, and stats from a variety of (open) sources and decipher between these data sources to create an informed pre-draft prediction of players. The inspiration for this project is [Text Mining of Scouting Reports as a Novel Data Source
 for Improving NHL Draft Analytics](https://pdfs.semanticscholar.org/2f0a/a4de57e251846b55de8792e5b5ef97264cfc.pdf) by Seppa, Schuckers, Rovito.
 
-# Research Goal 
-How can I predict major leaguers and their performance at the MLB level using publicly available (at least by paid subscription) statistics and scouting reports?
+vel using publicly available (at least by paid subscription) statistics and scouting reports?
 
 # EDA
 Filtering for the top 50 picks in the draft from 1990-2015, over 70% of college pitchers and batters made the MLB, while high school batters and pitchers made it close to 60% of the time. Batters have a slight bump over pitchers. 
