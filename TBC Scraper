@@ -58,7 +58,7 @@ scrape_tbc <- function(tbc_id) {
 
 tbc_scraped <- future_map(1:100, possibly(scrape_tbc, NULL), .progress = TRUE)
 
-tbc_data_2 <- bind_rows(tbc_scraped) %>% 
+tbc_data <- bind_rows(tbc_scraped) %>% 
   filter(!str_detect(lg, "Totals")) %>% 
   separate(`ID Numbers`, into = c("id1", "id2", "id3"), sep = "\\...", extra = "merge") %>% 
   separate(id2, into = c("id_type2", "id2"), sep = ": ", extra = "merge") %>% 
@@ -71,7 +71,7 @@ tbc_data_2 <- bind_rows(tbc_scraped) %>%
            TRUE ~ as.numeric(NA)
          ))  
 
-tbc_batting_2 <- tbc_data_2 %>% 
+tbc_batting <- tbc_data %>% 
   filter(is.na(ip)) %>% 
   select(player_name, tbc_id, retro_id, mlb_id, `Bats/Throws`, url, 
          year, lg, tm, lvl, org, unif, exp, age, g, ab, r, h, x2b, x3b, hr, rbi, sb, cs, bb, so,
@@ -84,7 +84,7 @@ tbc_batting_2 <- tbc_data_2 %>%
          ) 
 
 
-tbc_pitching_2 <- tbc_data_2 %>% 
+tbc_pitching <- tbc_data %>% 
   filter(!is.na(ip)) %>% 
   select(player_name, tbc_id, retro_id, mlb_id, `Bats/Throws`,  url, 
          year, lg, tm, lvl, org, unif, exp, age,
@@ -93,15 +93,6 @@ tbc_pitching_2 <- tbc_data_2 %>%
          `Draft Position`, `MLB Debut`, `High Level`, `Service Time`, `Relations`, `Stat Years`, `Current Status`, `Proper Name`)
   
 
-tbc_data %>% 
-  filter(`Proper Name` == "Michael Nelson Trout") %>% 
-  select(`ID Numbers`) %>% 
-  separate(`ID Numbers`, into = c("id1", "id2", "id3"), sep = "\\...", extra = "merge") %>% 
-  separate(id2, into = c("id_type2", "id2"), sep = ": ", extra = "merge") %>% 
-  separate(id3, into = c("id_type3", "id3"), sep = ": ", extra = "merge")
-
-bind_rows(tbc_1.3) %>% 
-  write.csv(file = "tbc_1.3.csv", row.names = FALSE)
 
 
 
