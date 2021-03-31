@@ -1,0 +1,108 @@
+library(janitor)
+library(future)
+library(tidyverse)
+library(furrr)
+library(purrr)
+library(tidylog)
+library(rvest)
+
+plan(multisession(workers = 9))
+
+scrape_tbc <- function(tbc_id) {
+  URL <- paste0("http://www.thebaseballcube.com/players/profile.asp?ID=", tbc_id)
+  html <- URL %>% 
+    read_html() 
+  
+  noder <- function(page, node) {
+    node_content <- html_text(html_nodes(page, node))
+    ifelse(length(node_content) == 0, NA, node_content)
+  }
+  
+  page_info <- html %>% 
+    html_nodes("nobr") %>% 
+    html_text() %>% 
+    as_tibble() %>% 
+    rename(description = value)
+  
+  player <- html %>% 
+    html_nodes(".h1_var") %>% 
+    html_text() %>% 
+    as_tibble() %>% 
+    rename(player_name = value)
+  
+  page_values <-  html %>% 
+    html_nodes(".grid_item_value") %>% 
+    html_text() %>%
+    as_tibble() %>% 
+    mutate(value = trimws(value))
+  
+  player_info <- bind_cols(page_info, page_values) %>% 
+    spread(key = description, value = value) %>% 
+    mutate(url = URL) %>% 
+    bind_cols(player)
+  
+  performance <- html %>% 
+    html_nodes("table") %>% 
+    .[2] %>% 
+    html_table(fill = TRUE) %>% 
+    as.data.frame() %>% 
+    slice(-1) %>% 
+    row_to_names(1) %>% 
+    clean_names() %>% 
+    rename(tm = team_name) %>% 
+    select(-contains("na")) %>% 
+    as_tibble()
+  
+  bind_cols(player_info, performance)
+}
+
+tbc_scraped <- future_map(1:100, possibly(scrape_tbc, NULL), .progress = TRUE)
+
+tbc_data_2 <- bind_rows(tbc_scraped) %>% 
+  filter(!str_detect(lg, "Totals")) %>% 
+  separate(`ID Numbers`, into = c("id1", "id2", "id3"), sep = "\\...", extra = "merge") %>% 
+  separate(id2, into = c("id_type2", "id2"), sep = ": ", extra = "merge") %>% 
+  separate(id3, into = c("id_type3", "id3"), sep = ": ", extra = "merge") %>% 
+  mutate(tbc_id = parse_number(id1),
+         retro_id = ifelse(id_type2 == " retro id", id2, NA),
+         mlb_id = case_when(
+           id_type2 == " mlbam id" ~ as.numeric(id2),
+           id_type3 == " mlbam id" ~ as.numeric(id3),
+           TRUE ~ as.numeric(NA)
+         ))  
+
+tbc_batting_2 <- tbc_data_2 %>% 
+  filter(is.na(ip)) %>% 
+  select(player_name, tbc_id, retro_id, mlb_id, `Bats/Throws`, url, 
+         year, lg, tm, lvl, org, unif, exp, age, g, ab, r, h, x2b, x3b, hr, rbi, sb, cs, bb, so,
+         hp, sh, sf, iw, dp, 
+         avg, obp, slg, ops, 
+         pa, tb, xbh, 
+         sec_a, iso, babip, bb_percent, so_percent, sobb, abhr, hr_percent, xbh_percent,
+         `Draft Position`, `MLB Debut`, `High Level`, `Service Time`, `Relations`, `Stat Years`, `Current Status`,
+         `Proper Name`
+         ) 
+
+
+tbc_pitching_2 <- tbc_data_2 %>% 
+  filter(!is.na(ip)) %>% 
+  select(player_name, tbc_id, retro_id, mlb_id, `Bats/Throws`,  url, 
+         year, lg, tm, lvl, org, unif, exp, age,
+         w, l, era, g, gs, cg, sho, gf, gr, sv, ip, h, r, er, hr, bb, so, 
+         wp, bk, hb, whip, h9, hr9, bb9, so9, ra9, sobb, wpct, 
+         `Draft Position`, `MLB Debut`, `High Level`, `Service Time`, `Relations`, `Stat Years`, `Current Status`, `Proper Name`)
+  
+
+tbc_data %>% 
+  filter(`Proper Name` == "Michael Nelson Trout") %>% 
+  select(`ID Numbers`) %>% 
+  separate(`ID Numbers`, into = c("id1", "id2", "id3"), sep = "\\...", extra = "merge") %>% 
+  separate(id2, into = c("id_type2", "id2"), sep = ": ", extra = "merge") %>% 
+  separate(id3, into = c("id_type3", "id3"), sep = ": ", extra = "merge")
+
+bind_rows(tbc_1.3) %>% 
+  write.csv(file = "tbc_1.3.csv", row.names = FALSE)
+
+
+
+
