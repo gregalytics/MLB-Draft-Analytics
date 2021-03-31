@@ -38,6 +38,8 @@ Evaluating some of these stats, there is a negative correlation between strikeou
 
 The most important variables in predicting if a pitcher will reach the majors or not are the statistical categories, highlighted by K% and BAA, with the SEC, Pac12, and Big12 coming up as some of the most important divisions in NCAA baseball.
 
+![image](https://user-images.githubusercontent.com/23176357/113218009-a722df80-9233-11eb-85a1-749d46562d5d.png)
+
 Based off of single seasons, here are the top 10 single seasons in MLB likelihood. Jered Weaver has two of the top 10 seasons, as he was an excellent starter at Long Beach State. Further needs to be done to blend multiple seasons together in the likelihood of making the majors, but this is a decent starting point. 
 
 ![image](https://user-images.githubusercontent.com/23176357/113217656-13511380-9233-11eb-9fba-a38780ca3b2c.png)
