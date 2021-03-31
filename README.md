@@ -22,13 +22,27 @@ Neither Baseball America nor MLB.com have a major bias in pitching or college pl
 
 ![image](https://user-images.githubusercontent.com/23176357/113216233-da17a400-9230-11eb-95ba-762727af18c0.png)
 
-College players unsurpringly reach the MLB quicker than high schoolers, where a good portion of college players reach the bigs in 2-4 years, while high schoolers take 3-5 more frequently. There is also a good contingent of college pitchers that reach the MLB the year after being drafted. 
+College players unsurpringly reach the MLB quicker than high schoolers, where a good portion of college players reach the bigs in 2-4 years, while high schoolers take 3-5 more frequently. There is also a good contingent of college pitchers that reach the MLB the year after being drafted. Further research with survival modeling could provide a 
 
 ![image](https://user-images.githubusercontent.com/23176357/113216275-ef8cce00-9230-11eb-8b29-d14a4da3ae1a.png)
 
 # College Pitcher Make MLB Model
 
+I have developed a stats-only based model to predict if a college pitcher will make the MLB based off of only one season of pitching. I trained on NCAA stats at all levels from 2000-2010, and tested on future data with 2011-2015 data. 
 
+The data is heavily imbalanced, as most pitchers do not reach the MLB, so I used a random forest with upsampling to predict if a pitcher will reach at least one game. Stats used were strikeout and walk percentages, RA9, Batting Average Against, Total Park Factor from BoydsWorld.com, innings pitched, conference, and age. 
+
+Evaluating some of these stats, there is a negative correlation between strikeout rate and RA9 and BAA. BB% has a positive correlation with RA9. 
+
+![image](https://user-images.githubusercontent.com/23176357/113217225-77bfa300-9232-11eb-8c30-0244bd8096b7.png)
+
+The most important variables in predicting if a pitcher will reach the majors or not are the statistical categories, highlighted by K% and BAA, with the SEC, Pac12, and Big12 coming up as some of the most important divisions in NCAA baseball.
+
+Based off of single seasons, here are the top 10 single seasons in MLB likelihood. Jered Weaver has two of the top 10 seasons, as he was an excellent starter at Long Beach State. Further needs to be done to blend multiple seasons together in the likelihood of making the majors, but this is a decent starting point. 
+
+![image](https://user-images.githubusercontent.com/23176357/113217656-13511380-9233-11eb-9fba-a38780ca3b2c.png)
+
+After I figure a way to weight each season in predicting reaching the MLB, I will then add text analytics (sentiment) and structured "unstructured" data (throws fastball, slider, curveball, arm slot, etc.) in predicting if pitchers will make the MLB or not. This doesn't necessarily players will be great major leaguers, so I will extend the analysis to account for a player's first 6-year WAR, and also may change the cutoff from just making the MLB to pitching 100 innings in the MLB. 
 
 
 # Perfect Game Scrapers
