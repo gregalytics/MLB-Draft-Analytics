@@ -8,7 +8,6 @@ Filtering for the top 50 picks in the draft from 1990-2015, over 70% of college 
 ![image](https://user-images.githubusercontent.com/23176357/113215767-37f7bc00-9230-11eb-925d-80122c3f349f.png)
 
 
-Filtering for the top 50 picks in the draft from 1990-2015, over 70% of college pitchers and batters made the MLB, while high school batters and pitchers made it close to 60% of the time. 
 ![image](https://user-images.githubusercontent.com/23176357/113215405-a5efb380-922f-11eb-90f8-1ad8a09332c9.png)
 
 MLB.com and Baseball America generally agree early on at the top of the draft, but disagree as each approach the bottom of their top 100.
