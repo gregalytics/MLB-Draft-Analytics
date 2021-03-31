@@ -70,7 +70,7 @@ tbc_data <- bind_rows(tbc_scraped) %>%
            id_type3 == " mlbam id" ~ as.numeric(id3),
            TRUE ~ as.numeric(NA)
          ))  
-
+ 
 tbc_batting <- tbc_data %>% 
   filter(is.na(ip)) %>% 
   select(player_name, tbc_id, retro_id, mlb_id, `Bats/Throws`, url, 
