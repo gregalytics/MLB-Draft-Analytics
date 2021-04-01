@@ -12,13 +12,13 @@ Filtering for the top 50 picks in the draft from 1990-2015, over 70% of college 
 
 MLB.com and Baseball America generally agree early on at the top of the draft, but disagree as each approach the bottom of their top 100.
 
-Neither Baseball America nor MLB.com have a major bias in pitching or college players
+Neither Baseball America nor MLB.com have a major bias in pitching or college players.
 
 ![image](https://user-images.githubusercontent.com/23176357/113216106-b6ecf480-9230-11eb-8016-dfc58afd7cf4.png)
 
 ![image](https://user-images.githubusercontent.com/23176357/113216233-da17a400-9230-11eb-95ba-762727af18c0.png)
 
-College players unsurpringly reach the MLB quicker than high schoolers, where a good portion of college players reach the bigs in 2-4 years, while high schoolers take 3-5 more frequently. There is also a good contingent of college pitchers that reach the MLB the year after being drafted. Further research with survival modeling could provide a 
+College players unsurpringly reach the MLB quicker than high schoolers, where a good portion of college players reach the bigs in 2-4 years, while high schoolers take 3-5 more frequently. There is also a good contingent of college pitchers that reach the MLB the year after being drafted. Further research with survival modeling could provide better insights into time to MLB.
 
 ![image](https://user-images.githubusercontent.com/23176357/113216275-ef8cce00-9230-11eb-8b29-d14a4da3ae1a.png)
 
